@@ -5,29 +5,27 @@
 using namespace std;
 
 int solution(int bridge_length, int weight, vector<int> truck_weights) {
-    int cnt = 1;
+    queue<int> q;
+    int time = 1;
     int num = 0;
-    int totalWeights = truck_weights[num];
-    queue<int>q;
     q.push(num);
+    int curW = truck_weights[0];
+    
     while(!q.empty()){
-        cnt++;
-        if(cnt>bridge_length){
-            if(q.front()!=-1) totalWeights-=truck_weights[q.front()];
+        time++;
+        if(time>bridge_length){
+            if(q.front()!=-1)curW -= truck_weights[q.front()];
             q.pop();
         }
-        if(num<truck_weights.size()-1){
-            if(totalWeights+truck_weights[num+1]<=weight){
+        if(num < truck_weights.size()-1){
+            if(weight>=curW + truck_weights[num+1]){
                 num++;
                 q.push(num);
-                totalWeights+=truck_weights[num];  
-                cout << cnt << " " << num << " " << totalWeights << '\n';
-                continue;
+                curW += truck_weights[num];
             }
-            q.push(-1);
+            else q.push(-1);
         }
         
-        
     }
-    return cnt;
+    return time;
 }
